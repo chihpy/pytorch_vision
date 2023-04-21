@@ -1,0 +1,7 @@
+*__pycache__
+*.png
+*.jpg
+*.tar
+*.log
+requirements.txt
+*.DS_Store
