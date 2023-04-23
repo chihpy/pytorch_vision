@@ -1,69 +1,26 @@
 # Pytorch Vision
-# Reference
+## Step by step command
+1. download and build dataset
+- download example dataset (SIGNS) from google drive [here](https://drive.google.com/file/d/1ufiR6hUKhXoAyiBNsySPkUwlvE_wfEHC/view)
+- build SIGNS dataset: 
+    - ```python build_dataset.py --data_dir data/SIGNS --output_dir data/64x64_SIGNS```
+    - check build_dataset.py for dataset structure and format requirement
+2. baseline model training
+    - ```python train.py --data_dir data/64x64_SIGNS --model_dir experiments/base_model```
+    - under experiments directory the base_model directory contain a file params.json, which sets the hyperparameters for the experiment.
+3. hyperparameters search:
+    - created a new directory learning_rate in experiments 
+    - ```python search_hyperparams.py --data_dir data/64x64_SIGNS --parent_dir experiments/learning_rate```
+4. Display the results of the hyperparameters search
+    - ```python synthesize_results.py --parent_dir experiments/learning_rate```
+5. Evaluation on the test set
+    - ```python evaluate.py --data_dir data/64x64_SIGNS --model_dir experiments/base_model```
+## TODO:
+- [ ] build cifar10 dataset
+- [ ] training on colab
+## Reference
 - [cs230 example code](https://github.com/cs230-stanford/cs230-code-examples)
 Note: in folder `pytorch/vision`.
-
-
-## Task
-Given an image of a hand doing a sign representing 0, 1, 2, 3, 4 or 5, predict the correct label.
-
-## step by step command
-1. __Download the SIGNS dataset__
-```
-python build_dataset.py --data_dir data/SIGNS --output_dir data/64x64_SIGNS
-```
-For the vision example, we will used the SIGNS dataset created for this class. The dataset is hosted on google drive, download it [here][SIGNS].
-
-This will download the SIGNS dataset (~1.1 GB) containing photos of hands signs making numbers between 0 and 5.
-Here is the structure of the data:
-```
-SIGNS/
-    train_signs/
-        0_IMG_5864.jpg
-        ...
-    test_signs/
-        0_IMG_5942.jpg
-        ...
-```
-
-The images are named following `{label}_IMG_{id}.jpg` where the label is in `[0, 5]`.
-The training set contains 1,080 images and the test set contains 120 images.
-
-Once the download is complete, move the dataset into `data/SIGNS`.
-2. __Your first experiment__ We created a `base_model` directory for you under the `experiments` directory. It contains a file `params.json` which sets the hyperparameters for the experiment. It looks like
-```json
-{
-    "learning_rate": 1e-3,
-    "batch_size": 32,
-    "num_epochs": 10,
-    ...
-}
-```
-For every new experiment, you will need to create a new directory under `experiments` with a similar `params.json` file.
-
-3. __Train__ your experiment. Simply run
-```
-python train.py --data_dir data/64x64_SIGNS --model_dir experiments/base_model
-```
-It will instantiate a model and train it on the training set following the hyperparameters specified in `params.json`. It will also evaluate some metrics on the validation set.
-
-4. __Your first hyperparameters search__ We created a new directory `learning_rate` in `experiments` for you. Now, run
-```
-python search_hyperparams.py --data_dir data/64x64_SIGNS --parent_dir experiments/learning_rate
-```
-It will train and evaluate a model with different values of learning rate defined in `search_hyperparams.py` and create a new directory for each experiment under `experiments/learning_rate/`.
-
-5. __Display the results__ of the hyperparameters search in a nice format
-```
-python synthesize_results.py --parent_dir experiments/learning_rate
-```
-
-6. __Evaluation on the test set__ Once you've run many experiments and selected your best model and hyperparameters based on the performance on the validation set, you can finally evaluate the performance of your model on the test set. Run
-```
-python evaluate.py --data_dir data/64x64_SIGNS --model_dir experiments/base_model
-```
-
-
 ## Guidelines for more advanced use
 
 We recommend reading through `train.py` to get a high-level overview of the training loop steps:
